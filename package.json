@@ -1,0 +1,17 @@
+{
+  "name": "phase1",
+  "version": "1.0.0",
+  "description": "Phase 1, local database",
+  "license": "ISC",
+  "author": "Tamil Pandian S",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "ejs": "^5.0.1",
+    "express": "^5.2.1",
+    "mongoose": "^9.3.3"
+  }
+}

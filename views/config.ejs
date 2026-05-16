@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONFIG</title>
+    <link rel="stylesheet" href="css/app.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <logo class="navbar">
+            <img class="logoheader" src="images/logo.png" alt="PowerPilot Logo">
+        </logo>
+        <div class="navbar">
+            <a class="navclick" href="/">Home</a>
+            <a class="navclick" id="navclickon" href="/config">Config</a>
+            <a class="navclick" href="/dashboard">Dashboard</a>
+            <a class="navclick" href="/tariffupdate">Tariff Update</a>
+        </div>
+    </header>
+
+    <div class="config-header">
+        <h1>Configuration Window</h1>
+    </div>
+
+    <div class="workspaceC">
+        <form action="/config" method="post" id="configForm">
+
+            <div class="channel-grid">
+
+                <!-- CHANNEL 1 -->
+                <div class="channel-card">
+                    <h4>Channel 1</h4>
+
+                    <label>Appliance</label>
+                    <select name="appliance1">
+                        <option value="none">None</option>
+                        <option value="washingmachine">Washing Machine</option>
+                        <option value="evcharging">EV Charging</option>
+                        <option value="waterpump">Water Pump</option>
+                        <option value="geyser">Geyser</option>
+                    </select>
+
+                    <label>Wattage (W)</label>
+                    <input type="number" name="app1wattage" id="w1" value="2000" min="50" max="20000" step="50">
+
+                    <label>Allowed From</label>
+                    <input type="time" id="t1start" value="03:00" step="900" onchange="syncTime('1','start',this.value)">
+                    <input type="hidden" name="app1start" id="h1start" value="180">
+
+                    <label>Allowed To</label>
+                    <input type="time" id="t1end" value="12:00" step="900" onchange="syncTime('1','end',this.value)">
+                    <input type="hidden" name="app1end" id="h1end" value="720">
+
+                    <label>Run Duration</label>
+                    <select name="app1duration" id="h1dur">
+                        <option value="15">15 min</option>
+                        <option value="30">30 min</option>
+                        <option value="45" selected>45 min</option>
+                        <option value="60">1 hour</option>
+                        <option value="90">1h 30min</option>
+                        <option value="120">2 hours</option>
+                        <option value="180">3 hours</option>
+                        <option value="240">4 hours</option>
+                        <option value="300">5 hours</option>
+                        <option value="360">6 hours</option>
+                    </select>
+                </div>
+
+                <!-- CHANNEL 2 -->
+                <div class="channel-card">
+                    <h4>Channel 2</h4>
+
+                    <label>Appliance</label>
+                    <select name="appliance2">
+                        <option value="none">None</option>
+                        <option value="washingmachine">Washing Machine</option>
+                        <option value="evcharging">EV Charging</option>
+                        <option value="waterpump">Water Pump</option>
+                        <option value="geyser">Geyser</option>
+                    </select>
+
+                    <label>Wattage (W)</label>
+                    <input type="number" name="app2wattage" id="w2" value="2000" min="50" max="20000" step="50">
+
+                    <label>Allowed From</label>
+                    <input type="time" id="t2start" value="06:00" step="900" onchange="syncTime('2','start',this.value)">
+                    <input type="hidden" name="app2start" id="h2start" value="360">
+
+                    <label>Allowed To</label>
+                    <input type="time" id="t2end" value="14:00" step="900" onchange="syncTime('2','end',this.value)">
+                    <input type="hidden" name="app2end" id="h2end" value="840">
+
+                    <label>Run Duration</label>
+                    <select name="app2duration" id="h2dur">
+                        <option value="15">15 min</option>
+                        <option value="30">30 min</option>
+                        <option value="45" selected>45 min</option>
+                        <option value="60">1 hour</option>
+                        <option value="90">1h 30min</option>
+                        <option value="120">2 hours</option>
+                        <option value="180">3 hours</option>
+                        <option value="240">4 hours</option>
+                        <option value="300">5 hours</option>
+                        <option value="360">6 hours</option>
+                    </select>
+                </div>
+
+                <!-- CHANNEL 3 -->
+                <div class="channel-card">
+                    <h4>Channel 3</h4>
+
+                    <label>Appliance</label>
+                    <select name="appliance3">
+                        <option value="none">None</option>
+                        <option value="washingmachine">Washing Machine</option>
+                        <option value="evcharging">EV Charging</option>
+                        <option value="waterpump">Water Pump</option>
+                        <option value="geyser">Geyser</option>
+                    </select>
+
+                    <label>Wattage (W)</label>
+                    <input type="number" name="app3wattage" id="w3" value="7400" min="50" max="20000" step="50">
+
+                    <label>Allowed From</label>
+                    <input type="time" id="t3start" value="08:00" step="900" onchange="syncTime('3','start',this.value)">
+                    <input type="hidden" name="app3start" id="h3start" value="480">
+
+                    <label>Allowed To</label>
+                    <input type="time" id="t3end" value="18:00" step="900" onchange="syncTime('3','end',this.value)">
+                    <input type="hidden" name="app3end" id="h3end" value="1080">
+
+                    <label>Run Duration</label>
+                    <select name="app3duration" id="h3dur">
+                        <option value="15">15 min</option>
+                        <option value="30">30 min</option>
+                        <option value="45" selected>45 min</option>
+                        <option value="60">1 hour</option>
+                        <option value="90">1h 30min</option>
+                        <option value="120">2 hours</option>
+                        <option value="180">3 hours</option>
+                        <option value="240">4 hours</option>
+                        <option value="300">5 hours</option>
+                        <option value="360">6 hours</option>
+                    </select>
+                </div>
+
+                <!-- CHANNEL 4 -->
+                <div class="channel-card">
+                    <h4>Channel 4</h4>
+
+                    <label>Appliance</label>
+                    <select name="appliance4">
+                        <option value="none">None</option>
+                        <option value="washingmachine">Washing Machine</option>
+                        <option value="evcharging">EV Charging</option>
+                        <option value="waterpump">Water Pump</option>
+                        <option value="geyser">Geyser</option>
+                    </select>
+
+                    <label>Wattage (W)</label>
+                    <input type="number" name="app4wattage" id="w4" value="1500" min="50" max="20000" step="50">
+
+                    <label>Allowed From</label>
+                    <input type="time" id="t4start" value="10:00" step="900" onchange="syncTime('4','start',this.value)">
+                    <input type="hidden" name="app4start" id="h4start" value="600">
+
+                    <label>Allowed To</label>
+                    <input type="time" id="t4end" value="20:00" step="900" onchange="syncTime('4','end',this.value)">
+                    <input type="hidden" name="app4end" id="h4end" value="1200">
+
+                    <label>Run Duration</label>
+                    <select name="app4duration" id="h4dur">
+                        <option value="15">15 min</option>
+                        <option value="30">30 min</option>
+                        <option value="45" selected>45 min</option>
+                        <option value="60">1 hour</option>
+                        <option value="90">1h 30min</option>
+                        <option value="120">2 hours</option>
+                        <option value="180">3 hours</option>
+                        <option value="240">4 hours</option>
+                        <option value="300">5 hours</option>
+                        <option value="360">6 hours</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="submit-row">
+                <button type="submit">Save Configuration</button>
+            </div>
+
+        </form>
+    </div>
+
+    <footer>
+        <div>
+            <p class="footertext">Copyright &copy; 2026 ProjectPowerPilot</p>
+        </div>
+    </footer>
+
+    <script>
+        function timeToMinutes(hhmm) {
+            if (!hhmm) return 0;
+            var parts = hhmm.split(':');
+            return parseInt(parts[0]) * 60 + parseInt(parts[1] || 0);
+        }
+
+        function syncTime(ch, field, val) {
+            var minutes = timeToMinutes(val);
+            document.getElementById('h' + ch + (field === 'start' ? 'start' : 'end')).value = minutes;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            ['1', '2', '3', '4'].forEach(function (ch) {
+                var ts = document.getElementById('t' + ch + 'start');
+                var te = document.getElementById('t' + ch + 'end');
+                if (ts) syncTime(ch, 'start', ts.value);
+                if (te) syncTime(ch, 'end', te.value);
+            });
+        });
+
+        document.getElementById('configForm').addEventListener('submit', function (e) {
+            for (var ch of ['1', '2', '3', '4']) {
+                var s   = parseInt(document.getElementById('h' + ch + 'start').value);
+                var end = parseInt(document.getElementById('h' + ch + 'end').value);
+                var dur = parseInt(document.getElementById('h' + ch + 'dur').value);
+                if (end <= s) {
+                    e.preventDefault();
+                    alert('Channel ' + ch + ': "To" time must be after "From" time.');
+                    return;
+                }
+                if (end - s < dur) {
+                    e.preventDefault();
+                    alert('Channel ' + ch + ': window is too narrow for the selected duration.');
+                    return;
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

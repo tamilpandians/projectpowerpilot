@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DASHBOARD</title>
+    <link rel="stylesheet" href="css/app.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <logo class="navbar">
+            <img class="logoheader" src="images/logo.png" alt="PowerPilot Logo">
+        </logo>
+        <div class="navbar">
+            <a class="navclick" href="/">Home</a>
+            <a class="navclick" href="/config">Config</a>
+            <a class="navclick" id="navclickon" href="/dashboard">Dashboard</a>
+            <a class="navclick" href="/tariffupdate">Tariff Update</a>
+        </div>
+    </header>
+
+    <div class="dash-header">
+        <h1>Dashboard</h1>
+    </div>
+
+    <div class="container">
+
+        <!-- Stat cards -->
+        <div class="stat-row">
+
+            <div class="card stat-card">
+                <h3>Today's Total Cost</h3>
+                <p class="stat-value">
+                    ₹<%= (typeof todayCost !== 'undefined' && todayCost !== null) ? todayCost.toFixed(2) : '0.00' %>
+                </p>
+                <p>accumulated since midnight</p>
+            </div>
+
+            <div class="card stat-card">
+                <h3>Active Channels</h3>
+                <p class="stat-value">
+                    <%= typeof activeChannels !== 'undefined' ? activeChannels : 0 %> / 4
+                </p>
+                <p>relay channels running</p>
+            </div>
+
+            <div class="card stat-card">
+                <h3>Scheduled Today</h3>
+                <p class="stat-value">
+                    <%= typeof scheduledCount !== 'undefined' ? scheduledCount : 0 %>
+                </p>
+                <p>appliances with a schedule</p>
+            </div>
+
+            <div class="card stat-card">
+                <h3>Peak Tariff Today</h3>
+                <p class="stat-value">
+                    ₹<%= (typeof peakTariff !== 'undefined') ? peakTariff.toFixed(2) : '—' %>
+                </p>
+                <p>max ₹/kWh today</p>
+            </div>
+
+        </div>
+
+        <!-- Appliance status -->
+        <h2>Appliance Status</h2>
+
+        <% if (typeof schedule !== 'undefined' && schedule && schedule.length > 0) { %>
+            <div class="appliance-grid" id="appGrid">
+                <% schedule.forEach(function(item) { %>
+                    <%
+                        function timeStrToMins(t) {
+                            if (!t) return 0;
+                            var parts = String(t).split(':');
+                            return parseInt(parts[0] || 0, 10) * 60 + parseInt(parts[1] || 0, 10);
+                        }
+                        var cardStartMin = (item.start_minute != null) ? parseInt(item.start_minute, 10)
+                            : (item.start_hour != null) ? parseInt(item.start_hour, 10) * 60
+                            : timeStrToMins(item.start_time);
+                        var cardEndMin = (item.end_minute != null) ? parseInt(item.end_minute, 10)
+                            : (item.end_hour != null) ? parseInt(item.end_hour, 10) * 60
+                            : timeStrToMins(item.end_time);
+                    %>
+                    <div class="card app-card"
+                         data-start="<%= cardStartMin %>"
+                         data-end="<%= cardEndMin %>"
+                         data-status="<%= item.status %>">
+
+                        <p><strong>Channel <%= item.channel %></strong></p>
+                        <p><%= item.appliance ? item.appliance.replace(/_/g, ' ') : 'None' %></p>
+                        <p class="app-status-text">Status: —</p>
+                        <p>On: <%= item.start_time %> &nbsp;|&nbsp; Off: <%= item.end_time %></p>
+                        <p>Est. cost: ₹<%= (item.cost_estimate || 0).toFixed(2) %></p>
+
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <div class="card">
+                <p>No schedule found for today. Configure appliances and submit to generate a schedule.</p>
+            </div>
+        <% } %>
+
+        <!-- Schedule history -->
+        <h2>Recent Schedule History</h2>
+
+        <% if (typeof recentSchedules !== 'undefined' && recentSchedules && recentSchedules.length > 0) { %>
+            <% recentSchedules.forEach(function(sched, schedIdx) { %>
+                <%
+                    var genDate  = new Date(sched.generated_at || sched.createdAt);
+                    var dateLabel = genDate.toLocaleDateString('en-IN', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
+                    var timeLabel = genDate.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' });
+                    var scheduledItems = (sched.schedule || []).filter(function(s){ return s.status === 'scheduled'; });
+                    var tariffSlots = (sched.tariff_slots && sched.tariff_slots.length)
+                        ? sched.tariff_slots
+                        : (typeof tariff !== 'undefined' && tariff && tariff.slots ? tariff.slots : []);
+
+                    function calcItemCost(item, slots) {
+                        var wattage  = item.wattage || item.wattage_w || 0;
+                        var startMin = item.start_min != null ? item.start_min : (item.start_minute != null ? item.start_minute : 0);
+                        var endMin   = item.end_min   != null ? item.end_min   : (item.end_minute   != null ? item.end_minute   : 0);
+                        var totalMin = endMin - startMin;
+                        if (!wattage || totalMin <= 0 || !slots || slots.length === 0) return item.cost_estimate || 0;
+                        var cost = 0;
+                        slots.forEach(function(slot) {
+                            var slotFrom = slot.from_min != null ? slot.from_min : (slot.from_hour * 60 || 0);
+                            var slotTo   = slot.to_min   != null ? slot.to_min   : (slot.to_hour * 60 || 1440);
+                            var price    = slot.price_per_kwh || slot.price || slot.rate || 0;
+                            var overlapStart = Math.max(startMin, slotFrom);
+                            var overlapEnd   = Math.min(endMin, slotTo);
+                            var overlapMin   = Math.max(0, overlapEnd - overlapStart);
+                            if (overlapMin > 0 && price > 0) cost += (wattage / 1000) * (overlapMin / 60) * price;
+                        });
+                        return cost > 0 ? cost : (item.cost_estimate || 0);
+                    }
+
+                    var totalCost = scheduledItems.reduce(function(s, i){ return s + calcItemCost(i, tariffSlots); }, 0);
+                %>
+
+                <div class="card">
+                    <h3><%= dateLabel %> <% if (schedIdx === 0) { %>(Latest)<% } %></h3>
+                    <p>Generated at <%= timeLabel %> &nbsp;|&nbsp; <%= scheduledItems.length %> of <%= (sched.schedule || []).length %> channels scheduled</p>
+
+                    <table class="sched-table">
+                        <thead>
+                            <tr>
+                                <th>Ch</th>
+                                <th>Appliance</th>
+                                <th>Start</th>
+                                <th>End</th>
+                                <th>Duration</th>
+                                <th>Est. Cost</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% (sched.schedule || []).forEach(function(item) { %>
+                                <tr>
+                                    <td><%= item.channel %></td>
+                                    <td><%= item.appliance ? item.appliance.replace(/_/g,' ') : '—' %></td>
+                                    <td><%= item.status === 'scheduled' ? item.start_time : '—' %></td>
+                                    <td><%= item.status === 'scheduled' ? item.end_time   : '—' %></td>
+                                    <td><%= (item.status === 'scheduled' && item.run_hours) ? item.run_hours + 'h' : '—' %></td>
+                                    <td><%= item.status === 'scheduled' ? '₹' + calcItemCost(item, tariffSlots).toFixed(2) : '—' %></td>
+                                    <td><%= item.status === 'scheduled' ? 'Scheduled' : 'Skipped' %></td>
+                                </tr>
+                            <% }); %>
+                            <% if (scheduledItems.length > 0) { %>
+                                <tr>
+                                    <td colspan="5" style="text-align:right"><strong>Total</strong></td>
+                                    <td><strong>₹<%= totalCost.toFixed(2) %></strong></td>
+                                    <td></td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+
+            <% }); %>
+        <% } else { %>
+            <div class="card">
+                <p>No schedule history yet. Schedule will appear here after the ML scheduler runs.</p>
+            </div>
+        <% } %>
+
+    </div>
+
+    <footer>
+        <div>
+            <p class="footertext">Copyright &copy; 2026 ProjectPowerPilot</p>
+        </div>
+    </footer>
+
+    <script>
+        function minsToHHMM(mins) {
+            var h = Math.floor(mins / 60);
+            var m = mins % 60;
+            return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+        }
+
+        function updateApplianceCards() {
+            var now = new Date();
+            var currentMins = now.getHours() * 60 + now.getMinutes();
+
+            document.querySelectorAll('.app-card').forEach(function (card) {
+                var startMin = parseInt(card.dataset.start);
+                var endMin   = parseInt(card.dataset.end);
+                var status   = card.dataset.status;
+                var statusEl = card.querySelector('.app-status-text');
+
+                if (status === 'skipped' || isNaN(startMin) || isNaN(endMin)) {
+                    if (statusEl) statusEl.textContent = 'Status: Skipped';
+                    return;
+                }
+
+                if (currentMins >= startMin && currentMins < endMin) {
+                    if (statusEl) statusEl.textContent = 'Status: Running';
+                } else if (currentMins < startMin) {
+                    if (statusEl) statusEl.textContent = 'Status: Scheduled';
+                } else {
+                    if (statusEl) statusEl.textContent = 'Status: Done';
+                }
+            });
+        }
+
+        updateApplianceCards();
+        setInterval(updateApplianceCards, 10000);
+
+        function pollTodayCost() {
+            fetch('/api/cost/today')
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    var el = document.getElementById('todayCostEl');
+                    if (el && typeof data.total_cost_Rs === 'number') {
+                        el.textContent = '₹' + data.total_cost_Rs.toFixed(2);
+                    }
+                })
+                .catch(function () {});
+        }
+
+        pollTodayCost();
+        setInterval(pollTodayCost, 30000);
+    </script>
+
+</body>
+</html>

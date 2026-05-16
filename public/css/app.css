@@ -1,0 +1,322 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Inter', sans-serif;
+    font-size: large;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+}
+
+.navclick {
+    margin: 0 15px;
+    color: black;
+    transition: 0.5s;
+}
+
+.navclick:hover {
+    background-color: grey;
+    color: black;
+    padding: 6px 16px;
+    border-radius: 20px;
+}
+
+.logoheader {
+    height: 60px;
+}
+
+a {
+    text-decoration: none;
+}
+
+#navclickon {
+    background-color: black;
+    color: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+}
+
+/* ── Footer ─────────────────────────────────────────────── */
+
+.footertext {
+    text-align: center;
+    padding: 25px;
+}
+
+/* ── Shared card ─────────────────────────────────────────── */
+
+.container {
+    width: 90%;
+    margin: 40px auto;
+}
+
+.card {
+    background: #f5f5f5;
+    border: 2px solid #999;
+    border-radius: 25px;
+    padding: 30px;
+    margin-bottom: 40px;
+}
+
+.card h2 {
+    margin-bottom: 15px;
+    font-size: 22px;
+}
+
+.card h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.card p {
+    font-size: 17px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.card i {
+    font-style: italic;
+}
+
+/* ── Page headers ────────────────────────────────────────── */
+
+.config-header,
+.dash-header,
+.tariff-header {
+    width: 100%;
+    text-align: center;
+    padding: 25px 0;
+    margin-bottom: 30px;
+}
+
+.config-header h1,
+.dash-header h1,
+.tariff-header h1 {
+    font-size: 38px;
+    font-weight: 600;
+    color: #111;
+    position: relative;
+    display: inline-block;
+}
+
+.config-header h1::after,
+.dash-header h1::after,
+.tariff-header h1::after {
+    content: "";
+    width: 60%;
+    height: 4px;
+    background: black;
+    position: absolute;
+    left: 20%;
+    bottom: -10px;
+    border-radius: 5px;
+}
+
+/* ── Config page ─────────────────────────────────────────── */
+
+.workspaceC {
+    width: 90%;
+    margin: 0 auto 40px;
+}
+
+.channel-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.channel-card {
+    background: #f5f5f5;
+    border: 2px solid #999;
+    border-radius: 25px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.channel-card h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.channel-card label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.channel-card select,
+.channel-card input[type="number"],
+.channel-card input[type="time"] {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.channel-card select:hover,
+.channel-card input:hover {
+    border-color: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.submit-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.submit-row button {
+    padding: 12px 50px;
+    border-radius: 8px;
+    border: none;
+    background: black;
+    color: white;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.submit-row button:hover {
+    background: grey;
+}
+
+/* ── Dashboard page ──────────────────────────────────────── */
+
+.stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: 600;
+    margin: 10px 0;
+}
+
+.container h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.appliance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.app-card {
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+.app-card p {
+    margin-bottom: 4px;
+}
+
+/* ── Schedule table ──────────────────────────────────────── */
+
+.sched-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.sched-table th {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 2px solid #999;
+    font-weight: 600;
+}
+
+.sched-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #ccc;
+}
+
+/* ── Tariff update page ──────────────────────────────────── */
+
+.workspaceT {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    font-family: 'Inter', sans-serif;
+}
+
+.workspaceT form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+}
+
+.tariff-column {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px 15px;
+    padding: 25px;
+    background: #f5f5f5;
+    border: 2px solid #999;
+    border-radius: 25px;
+}
+
+.tariff-column label {
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.tariff-column input {
+    width: 70px;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    transition: 0.2s;
+}
+
+.tariff-column input:hover {
+    border-color: black;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+.workspaceT button {
+    flex-basis: 100%;
+    max-width: 200px;
+    margin-top: 20px;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background: black;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.workspaceT button:hover {
+    background: grey;
+}
